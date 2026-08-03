@@ -1,0 +1,36 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Secrets and local config
+.env
+.env.*
+*.pem
+*.key
+!*.pub
+
+# Terraform — state can contain PLAINTEXT SECRETS. Never commit it.
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+crash.log
+crash.*.log
+
+# Kubernetes / Helm
+kubeconfig
+*.kubeconfig
+charts/*.tgz
+
+# OS and editors
+.DS_Store
+.idea/
+.vscode/
+*.swp
