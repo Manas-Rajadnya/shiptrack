@@ -1,0 +1,23 @@
+---
+services:
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: devroot
+      MYSQL_DATABASE: shiptrack
+    ports:
+      - "3307:3306"
+    volumes:
+      - shiptrack-data:/var/lib/mysql
+
+  app:
+    build: .
+    ports:
+      - "8001:8000"
+    environment:
+      DATABASE_URL: "mysql+pymysql://root:devroot@db:3306/shiptrack"
+    depends_on:
+      - db
+
+volumes:
+  shiptrack-data:
