@@ -11,7 +11,13 @@ DATABASE_URL = os.getenv(
 # pool_pre_ping issues a cheap SELECT 1 before handing out a pooled connection,
 # so a connection killed by the DB (restart, timeout) is discarded rather than
 # handed to a request that then fails. Day 26 / INC-005 breaks this on purpose.
-engine = create_engine(DATABASE_URL, pool_pre_ping=True, pool_size=5, pool_recycle=1800)
+engine = create_engine(
+    DATABASE_URL,
+    pool_pre_ping=True,
+    pool_size=5,
+    pool_recycle=1800,
+    connect_args={"connect_timeout": 3},
+)
 
 app = FastAPI(title="ShipTrack", version="0.1.0")
 
