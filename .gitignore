@@ -16,7 +16,8 @@ htmlcov/
 
 # Terraform — state can contain PLAINTEXT SECRETS. Never commit it.
 .terraform/
-.terraform.lock.hcl
+# .terraform.lock.hcl is deliberately NOT ignored - it pins provider
+# versions so every machine and CI get identical behaviour (like requirements.txt)
 *.tfstate
 *.tfstate.*
 *.tfvars
