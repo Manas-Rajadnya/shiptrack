@@ -35,23 +35,3 @@ variable "environment" {
   type        = string
 }
 
-resource "aws_vpc" "practice" {
-  cidr_block           = var.vpc_cidr
-  enable_dns_hostnames = true
-  enable_dns_support   = true
-
-  tags = {
-    Name        = "shiptrack-${var.environment}"
-    Environment = var.environment
-    ManagedBy   = "terraform"
-  }
-}
-
-output "vpc_id" {
-  description = "ID of the created VPC"
-  value       = aws_vpc.practice.id
-}
-
-output "vpc_cidr" {
-  value = aws_vpc.practice.cidr_block
-}
