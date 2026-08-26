@@ -41,3 +41,23 @@ jobs:
           push: true
           tags: ghcr.io/manas-rajadnya/shiptrack:${{ github.sha }}
 
+  
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Get AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::175342148773:role/github-actions-shiptrack
+          aws-region: eu-north-1
+
+      - name: Prove we have AWS access with no stored key
+        run: |
+          aws sts get-caller-identity
+          aws ec2 describe-instances --query 'Reservations[].Instances[].[InstanceId,State.Name]' --output table
+
+
