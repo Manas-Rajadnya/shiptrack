@@ -49,11 +49,6 @@ jobs:
       id-token: write
       contents: read
     steps:
-      - name: DEBUG - what claims is GitHub sending?
-        run: |
-          TOKEN=$(curl -s -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
-            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com" | jq -r '.value')
-          echo "$TOKEN" | cut -d. -f2 | base64 -d 2>/dev/null | jq '{sub, aud, repository}'
 
       - name: Get AWS credentials via OIDC
         uses: aws-actions/configure-aws-credentials@v4
@@ -65,5 +60,26 @@ jobs:
         run: |
           aws sts get-caller-identity
           aws ec2 describe-instances --query 'Reservations[].Instances[].[InstanceId,State.Name]' --output table
+
+
+  deploy-production:
+    runs-on: ubuntu-latest
+    needs: deploy
+    environment: production
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Get AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::175342148773:role/github-actions-shiptrack
+          aws-region: eu-north-1
+
+      - name: Deploy to production
+        run: |
+          echo "Deploying image ghcr.io/manas-rajadnya/shiptrack:${{ github.sha }}"
+          aws sts get-caller-identity
+
 
 
